@@ -11,6 +11,10 @@ for i in range(10):
     
 #         print(datetime_value)
 
-
+        datetime_value = df.iloc[i]['datetime']
+#         datetime_value = df.iloc[i]['datetime']
+    
+        print(datetime_value)
+#         print(datetime_value)
 
 
