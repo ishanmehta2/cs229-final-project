@@ -14,9 +14,28 @@ pats_dates = set(pats_data['game_date'])
 # Find common dates
 common_dates = ne_dates.intersection(pats_dates)
 
+feature_dict = {'play_id', 'game_id', 'home_team', 'away_team' 'yardline_100', 'game_date', 'game_seconds_remaining',
+                'down', 'ydstogo', 'play_type', 'no_huddle', 'shotgun', 'pass_length', 'pass_location', 'run_location',
+                'posteam_timeouts_remaining', 'defteam_timeouts_remaining', 'score_differential', 'roof', 'surface', 'offense_formation',
+                'offense_personnel', 'defenders_in_box', 'defense_personnel'}
+
+new_pats_data = pats_data[['play_id', 'game_id', 'home_team', 'away_team', 'yardline_100', 'game_date', 'game_seconds_remaining',
+                'down', 'ydstogo', 'play_type', 'no_huddle', 'shotgun', 'pass_length', 'pass_location', 'run_location',
+                'posteam_timeouts_remaining', 'defteam_timeouts_remaining', 'score_differential', 'roof', 'surface', 'offense_formation',
+                'offense_personnel', 'defenders_in_box', 'defense_personnel']]
+
+print(new_pats_data.head())
+
+# Team to weather dicts
+
+
+
+
 # Print common dates
 
-print(sorted(common_dates))
+# print(sorted(common_dates))
+
+# print(pats_data.head())
     
 
 
