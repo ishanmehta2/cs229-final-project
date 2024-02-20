@@ -37,10 +37,49 @@ team_to_weather_mapping = {'ARI': 'weather_data/phoenix.csv', 'ATL' : 'weather_d
                            'NE' : 'weather_data/ne.csv', 'NO' : 'weather_data/no.csv', 'NYG' :'weather_data/ny.csv', 'NYJ' : 'weather_data/ny.csv', 'PHI' :'weather_data/phi.csv',
                            'PIT' : 'weather_data/pit.csv', 'SF' : 'weather_data/sf.csv', 'SEA' : 'weather_data/sea.csv', 'TB' : 'weather_data/tb.csv', 'TEN' : 'weather_data/ten.csv', 'WAS' : 'weather_data/was.csv'}
 
+new_mapping = {}
+    
+# Iterate through the original dictionary
+for team, _ in team_to_weather_mapping.items():
+    # For each team, create a new value in the specified format and add it to the new dictionary
+    new_mapping[team] = f'{team.lower()}_data.csv'
+
+# print(new_mapping)
+
+team_data = {}
+teams = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CIN', 'CLE', 'DAL', 'DEN', 'DET', 'GB', 'HOU', 'IND', 'JAX', 'KC', 'LV', 'LAC', 'LAR', 'MIA', 'MIN', 'NE', 'NO', 'NYG', 'NYJ', 'PHI', 'PIT', 'SF', 'SEA', 'TB', 'TEN', 'WAS']
+
+
+# Read in all the team data
+for team in teams:
+    variable_name = team + 'data'  # Create the variable name string
+    filename = f'{team.lower()}_data.csv'  # Construct the file name based on the team name
+    try:
+        # Read the CSV file and store the DataFrame in the dictionary with the created variable name as key
+        team_data[variable_name] = pd.read_csv(filename)
+    except FileNotFoundError:
+        print(f'File not found for {team}, skipping.')
+
+print(team_data)
+
+updated_dict = {}
+
+for team in team_data:
+    new_variable_name = 'new' + team + 'data'
+    variable_name = team + 'data'
+    updated_dict[new_variable_name] = team_data[variable_name][['play_id', 'game_id', 'home_team', 'away_team', 'yardline_100', 'game_date', 'game_seconds_remaining',
+                'down', 'ydstogo', 'play_type', 'no_huddle', 'shotgun', 'pass_length', 'pass_location', 'run_location',
+                'posteam_timeouts_remaining', 'defteam_timeouts_remaining', 'score_differential', 'roof', 'surface', 'offense_formation',
+                'offense_personnel', 'defenders_in_box', 'defense_personnel']]
+
+# print(updated_dict)
+
+
 for team in team_to_weather_mapping:
     team_weather = pd.read_csv(team_to_weather_mapping[team])
     updated_team = team_weather[['datetime', 'temp', 'humidity', 'precip', 'windspeed']]
-    print(updated_team.head())
+    # print(updated_team.head())
+
 
 
 # Let's also loop through and only get gamedays
