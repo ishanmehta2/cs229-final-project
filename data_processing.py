@@ -58,7 +58,7 @@ for team in teams:
     
     try:
         # Read the CSV file and store the DataFrame in the dictionary with the created variable name as key
-        team_data[team] = pd.read_csv('updated_team_data/' + filename)
+        team_data[team] = pd.read_csv('updated_updated_team_data/' + filename)
     except FileNotFoundError:
         print(f'File not found for {team}, skipping.')
 
@@ -84,7 +84,7 @@ print(weather_mapping)
 # Updating weather to only be what we want it to be
 
 for team in cur_teams:
-    print(weather_mapping[team])
+    # print(weather_mapping[team])
     print(team_data[team])
 
 

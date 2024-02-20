@@ -41,7 +41,7 @@ def process_team_data(team_abbrev):
   offensive_snaps = offensive_snaps[['play_sequence_num', 'game_id', 'home_team', 'away_team', 'yardline_100', 'game_date', 'game_seconds_remaining',
                 'down', 'ydstogo', 'play_type', 'no_huddle', 'shotgun', 'pass_length', 'pass_location', 'run_location',
                 'posteam_timeouts_remaining', 'defteam_timeouts_remaining', 'score_differential', 'roof', 'surface', 'offense_formation',
-                'offense_personnel', 'defenders_in_box', 'defense_personnel']]
+                'offense_personnel', 'defenders_in_box', 'defense_personnel', 'weather']]
   return offensive_snaps
 
 team_plays_dict = {}
