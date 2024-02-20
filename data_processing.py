@@ -14,6 +14,7 @@ pats_dates = set(pats_data['game_date'])
 # Find common dates
 common_dates = ne_dates.intersection(pats_dates)
 
+print("hello")
 # Dictionary definitions
 
 feature_dict = {'play_id', 'game_id', 'home_team', 'away_team' 'yardline_100', 'game_date', 'game_seconds_remaining',
