@@ -1,9 +1,14 @@
+import os
 import pandas as pd
 import numpy as np
 
+team_play_files = './updated_team_data'
+weather_data = './weather_data'
+
+
 sf_df = pd.read_csv('weather_data/sf.csv')
-ne_df = pd.read_csv('ne.csv')
-pats_data = pd.read_csv('pats_data.csv')
+ne_df = pd.read_csv('updated_team_data/ne_data.csv')
+pats_data = pd.read_csv('updated_team_data/ne_data.csv')
 
 ne_df['datetime'] = pd.to_datetime(ne_df['datetime']).dt.date
 pats_data['game_date'] = pd.to_datetime(pats_data['game_date']).dt.date
@@ -83,8 +88,7 @@ for team in team_to_weather_mapping:
     updated_team = team_weather[['datetime', 'temp', 'humidity', 'precip', 'windspeed']]
     weather_mapping[team] = updated_team
 
-# print(weather_mapping)
-    # print(updated_team.head())
+print(weather_mapping)
 
 
 merged_data_for_each_team = {}
