@@ -60,26 +60,39 @@ for team in teams:
     except FileNotFoundError:
         print(f'File not found for {team}, skipping.')
 
+# print(team_data)
 print(team_data)
 
-updated_dict = {}
 
-for team in team_data:
-    new_variable_name = 'new' + team + 'data'
-    variable_name = team + 'data'
-    updated_dict[new_variable_name] = team_data[variable_name][['play_id', 'game_id', 'home_team', 'away_team', 'yardline_100', 'game_date', 'game_seconds_remaining',
-                'down', 'ydstogo', 'play_type', 'no_huddle', 'shotgun', 'pass_length', 'pass_location', 'run_location',
-                'posteam_timeouts_remaining', 'defteam_timeouts_remaining', 'score_differential', 'roof', 'surface', 'offense_formation',
-                'offense_personnel', 'defenders_in_box', 'defense_personnel']]
+
+
+# for team in team_data:
+#     new_variable_name = 'new' + team + 'data'
+#     variable_name = team + 'data'
+#     updated_dict[new_variable_name] = team_data[variable_name][['play_id', 'game_id', 'home_team', 'away_team', 'yardline_100', 'game_date', 'game_seconds_remaining',
+#                 'down', 'ydstogo', 'play_type', 'no_huddle', 'shotgun', 'pass_length', 'pass_location', 'run_location',
+#                 'posteam_timeouts_remaining', 'defteam_timeouts_remaining', 'score_differential', 'roof', 'surface', 'offense_formation',
+#                 'offense_personnel', 'defenders_in_box', 'defense_personnel']]
 
 # print(updated_dict)
 
+weather_mapping = {}
 
 for team in team_to_weather_mapping:
     team_weather = pd.read_csv(team_to_weather_mapping[team])
     updated_team = team_weather[['datetime', 'temp', 'humidity', 'precip', 'windspeed']]
+    weather_mapping[team] = updated_team
+
+# print(weather_mapping)
     # print(updated_team.head())
 
+
+merged_data_for_each_team = {}
+for team in teams:
+    final_df = team_data[team].concat(weather_mapping[team])
+    merged_data_for_each_team[team] = final_df
+
+# print(merged_data_for_each_team)
 
 
 # Let's also loop through and only get gamedays
