@@ -5,7 +5,7 @@ import numpy as np
 team_play_files = './updated_team_data'
 weather_data = './weather_data'
 
-'''
+
 sf_df = pd.read_csv('weather_data/sf.csv')
 ne_df = pd.read_csv('updated_team_data/ne_data.csv')
 pats_data = pd.read_csv('updated_team_data/ne_data.csv')
@@ -18,7 +18,7 @@ pats_dates = set(pats_data['game_date'])
 
 # Find common dates
 common_dates = ne_dates.intersection(pats_dates)
-'''
+
 print("hello")
 # Dictionary definitions
 
