@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -9,8 +10,20 @@ from sklearn.datasets import make_classification
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
 
-data = pd.read_csv('play_data/ARI_data.csv')
-data = data[(data['run_location'] != None) | (data['pass_location'] != None)]
+dfs = []
+folder_path = '/Users/ohmpatel/Documents/GitHub/cs229-final-project/updated_updated_team_data'
+for filename in os.listdir('./updated_updated_team_data'):
+  print(filename)
+  file_path = os.path.join(folder_path, filename)
+  df = pd.read_csv(file_path)
+  dfs.append(df)
+
+data = pd.concat(dfs, ignore_index=True)
+for idx, row in data.iterrows():
+  if str(row['run_location']) == "nan" and str(row['pass_location']) == "nan":
+    data.drop(idx, inplace=True)
+
+data.to_csv('combined_data.csv')
  
 outcome_run_pass = []
 outcome_buckets = []
@@ -39,6 +52,9 @@ y = []
 for outcome in outcome_buckets:
   y.append(result_d[outcome])
 y = np.array(y)
+
+X = np.array(X)
+X = np.nan_to_num(X)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=3)
 
