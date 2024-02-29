@@ -81,17 +81,6 @@ for team in teams:
         print(f'File not found for {team}, skipping.')
 
 
-#print(weather_mapping)
-# print(team_data)
-
-# Updating weather to only be what we want it to be
-
-#for team in cur_teams:
-    # print(weather_mapping[team])
-    #print(team_data[team])
-
-
-
 
 for team, df in team_data.items():
     # Define the file name for each team's CSV
@@ -102,19 +91,6 @@ for team, df in team_data.items():
 
 print("CSV files have been saved for each team.")
 
-# print(team_data)
-
-
-    
-    # if team == 'ARI':
-        
-
-        # print(team_pd_df.loc[:, 'datetime'])
-        # Format: 2024-01-30
-
-# print(weather_mapping['ARI'].columns)
-
-
 
 for column in weather_mapping['ARI'].columns:
     team_data['ARI'][column] = None
@@ -124,57 +100,89 @@ for team in cur_teams:
     team_vec = []
     recent = 0
     team_pd_df = team_data[team]
+    
     team_weather_pd_df = weather_mapping[team]
 
-    vectorized_team_dates= set()
-    # if team == 'ARI':
+    # Finding the home team 
     for i in range(1, len(team_pd_df)):
+        try:
+            home_team = str(team_pd_df.loc[i, 'home_team'])
+            cur_date = team_pd_df.loc[i, 'game_date']
+            if home_team in teams:
+                # print(weather_mapping[home_team])
+                weather_pd_df = weather_mapping[home_team]
+                matching_row = weather_pd_df[weather_pd_df['datetime'] == cur_date]
+                for col in matching_row.columns:
+                    if pd.isnull(team_pd_df.loc[i, col]):
+                        team_pd_df.loc[i, col] = matching_row[col].values[0]
+    
+
+                
+
+        except:
+            team_pd_df = team_pd_df.drop(i)
         
-            vectorized_team_dates.add(team_pd_df['game_date'][i])
-
-    for ind in team_pd_df:
-        # for index in team_weather_pd_df:
-        for i in range(recent + 1, len(team_weather_pd_df)):
-            if team_weather_pd_df['datetime'][i] in vectorized_team_dates: 
-                team_vec.append(i)
-                recent = i
-    
-    cut_down_df = pd.DataFrame(columns=['name', 'datetime', 'tempmax', 'tempmin', 'temp', 'feelslikemax',
-       'feelslikemin', 'feelslike', 'dew', 'humidity', 'precip', 'precipprob',
-       'precipcover', 'preciptype', 'snow', 'snowdepth', 'windgust',
-       'windspeed', 'winddir', 'sealevelpressure', 'cloudcover', 'visibility',
-       'solarradiation', 'solarenergy', 'uvindex', 'severerisk', 'sunrise',
-       'sunset', 'moonphase', 'conditions', 'description', 'icon', 'stations'])
-    
-    weather_df_sorted = team_weather_pd_df.sort_values(by='datetime', ascending=True)
-    team_data_sorted = team_pd_df.sort_values(by='game_date', ascending=True)
-    # weather_df_sorted = weather_df_sorted.rename(columns={'datetime': 'game_date'})
-
-    
-    for ind in team_vec:
-    # Assuming 'ind' is a valid index in both DataFrames and they are aligned
-    # Extract row data from weather DataFrame
-        row_data = weather_df_sorted.loc[ind]
+        # print(team_pd_df.loc[i])
+    print(len(team_pd_df))
         
-        # Update the team_data_sorted DataFrame's corresponding row
-        # Here, we iterate over each column that needs to be updated
-        for col in weather_df_sorted.columns:
-            # Assuming the same column names or you have a mapping of column names
-            # Update the value in team_data_sorted at the same index and column
-            if col in team_data_sorted.columns:
-                team_data_sorted.at[ind, col] = row_data[col]
+        
     
-    if team == 'ARI':
-        specific_date = '2016-09-11'
-        specific_row = team_data_sorted.query(f"game_date == '{specific_date}'")
+        # Finding the weather from the home team city
 
-        # Print each column value for the row
-        if not specific_row.empty:
-            print(f"Values for {specific_date}:")
-            for column in specific_row.columns:
-                print(f"{column}: {specific_row.iloc[0][column]}")
-        else:
-            print(f"No data found for {specific_date}")
+
+
+
+
+    # vectorized_team_dates= set()
+    # # if team == 'ARI':
+    # for i in range(1, len(team_pd_df)):
+        
+    #         vectorized_team_dates.add(team_pd_df['game_date'][i])
+
+    # for ind in team_pd_df:
+    #     # for index in team_weather_pd_df:
+    #     for i in range(recent + 1, len(team_weather_pd_df)):
+    #         if team_weather_pd_df['datetime'][i] in vectorized_team_dates: 
+    #             team_vec.append(i)
+    #             recent = i
+    
+    # cut_down_df = pd.DataFrame(columns=['name', 'datetime', 'tempmax', 'tempmin', 'temp', 'feelslikemax',
+    #    'feelslikemin', 'feelslike', 'dew', 'humidity', 'precip', 'precipprob',
+    #    'precipcover', 'preciptype', 'snow', 'snowdepth', 'windgust',
+    #    'windspeed', 'winddir', 'sealevelpressure', 'cloudcover', 'visibility',
+    #    'solarradiation', 'solarenergy', 'uvindex', 'severerisk', 'sunrise',
+    #    'sunset', 'moonphase', 'conditions', 'description', 'icon', 'stations'])
+    
+    # weather_df_sorted = team_weather_pd_df.sort_values(by='datetime', ascending=True)
+    # team_data_sorted = team_pd_df.sort_values(by='game_date', ascending=True)
+    # # weather_df_sorted = weather_df_sorted.rename(columns={'datetime': 'game_date'})
+
+    
+    # for ind in team_vec:
+    # # Assuming 'ind' is a valid index in both DataFrames and they are aligned
+    # # Extract row data from weather DataFrame
+    #     row_data = weather_df_sorted.loc[ind]
+        
+    #     # Update the team_data_sorted DataFrame's corresponding row
+    #     # Here, we iterate over each column that needs to be updated
+    #     for col in weather_df_sorted.columns:
+    #         # Assuming the same column names or you have a mapping of column names
+    #         # Update the value in team_data_sorted at the same index and column
+    #         if col in team_data_sorted.columns:
+    #             team_data_sorted.at[ind, col] = row_data[col]
+    
+    # if team == 'ARI':
+    #     specific_date = '2016-09-11'
+    #     specific_row = team_data_sorted.query(f"game_date == '{specific_date}'")
+
+    #     # Print each column value for the row
+    #     if not specific_row.empty:
+    #         print(f"Values for {specific_date}:")
+    #         for column in specific_row.columns:
+    #             print(f"{column}: {specific_row.iloc[0][column]}")
+    #     else:
+    #         print(f"No data found for {specific_date}")
+
 
 
             
