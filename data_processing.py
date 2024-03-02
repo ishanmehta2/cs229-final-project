@@ -70,17 +70,36 @@ for team in teams:
 
 weather_mapping = {}
 
+weather_mapping = {'ARI': 'weather_data/ari.csv', 'ATL' : 'weather_data/atl.csv', 'BAL' : 'weather_data/bal.csv', 
+                           'BUF' : 'weather_data/buf.csv', 'CAR' : 'weather_data/car.csv', 'CHI' : 'weather_data/chi.csv',
+                           'CIN' :  'weather_data/cin.csv', 'CLE' : 'weather_data/cle.csv', 'DAL' : 'weather_data/dal.csv',
+                           'DEN' : 'weather_data/den.csv', 'DET' : 'weather_data/det.csv', 
+                           'GB' : 'weather_data/gb.csv', 'HOU' :'weather_data/hou.csv',
+                           'IND' : 'weather_data/ind.csv', 'JAX' :'weather_data/jax.csv', 'KC' : 'weather_data/kc.csv', 'LV' : 'weather_data/lv.csv',
+                           'LAC' :  'weather_data/la.csv', 'LA' : 'weather_data/la.csv', 'MIA' : 'weather_data/mia.csv', 'MIN' : 'weather_data/min.csv', 
+                           'NE' : 'weather_data/ne.csv', 'NO' : 'weather_data/no.csv', 'NYG' :'weather_data/ny.csv', 'NYJ' : 'weather_data/ny.csv', 'PHI' :'weather_data/phi.csv',
+                           'PIT' : 'weather_data/pit.csv', 'SF' : 'weather_data/sf.csv', 'SEA' : 'weather_data/sea.csv', 'TB' : 'weather_data/tb.csv', 'TEN' : 'weather_data/ten.csv', 'WAS' : 'weather_data/was.csv'}
+
+
+# for team in teams:
+#       # Create the variable name string
+#     filename = f'{team.lower()}.csv'  # Construct the file name based on the team name
+#     print(filename)
+#     try:
+#         # Read the CSV file and store the DataFrame in the dictionary with the created variable name as key
+#         weather_mapping[team] = pd.read_csv('weather_data/' + filename)
+#     except FileNotFoundError:
+#         print(f'File not found for {team}, skipping.')
 
 for team in teams:
-      # Create the variable name string
-    filename = f'{team.lower()}.csv'  # Construct the file name based on the team name
-    print(filename)
     try:
-        # Read the CSV file and store the DataFrame in the dictionary with the created variable name as key
-        weather_mapping[team] = pd.read_csv('weather_data/' + filename)
-    except FileNotFoundError:
-        print(f'File not found for {team}, skipping.')
-
+        temp = weather_mapping[team]
+        new_temp = pd.read_csv('/Users/ishan/Desktop/cs229-final-project/' + temp)
+        weather_mapping[team] = new_temp
+        print("processsed")
+        
+    except:
+        print('File not found for {team}, skipping.')
 
 
 for team, df in team_data.items():
@@ -103,6 +122,7 @@ for team in cur_teams:
     team_pd_df = team_data[team]
     
     team_weather_pd_df = weather_mapping[team]
+    count = 0
 
     # Finding the home team 
     for i in range(1, len(team_pd_df)):
@@ -110,21 +130,20 @@ for team in cur_teams:
             home_team = str(team_pd_df.loc[i, 'home_team'])
             cur_date = team_pd_df.loc[i, 'game_date']
             if home_team in teams:
-                # print(weather_mapping[home_team])
                 weather_pd_df = weather_mapping[home_team]
                 matching_row = weather_pd_df[weather_pd_df['datetime'] == cur_date]
                 for col in matching_row.columns:
                     if pd.isnull(team_pd_df.loc[i, col]):
                         team_pd_df.loc[i, col] = matching_row[col].values[0]
     
-
-                
-
-        except:
-            team_pd_df = team_pd_df.drop(i)
+        except Exception as e:
+            print(f"Error processing row {i}: {e}")
+        # except:
+        #     team_pd_df = team_pd_df.drop(i)
+        #     count += 1
         
         # print(team_pd_df.loc[i])
-    print(len(team_pd_df))
+    print(len(team_pd_df), count)
         
         
     
