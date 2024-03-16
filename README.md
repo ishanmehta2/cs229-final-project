@@ -1,2 +1,4 @@
 # cs229 final project
- Predicting Brady's Offensive Plays
+
+Using Historical Game And Weather Data To
+Predict The Next Offensive Football Play
